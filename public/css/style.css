@@ -212,8 +212,8 @@ aside i,
     **********/
 #hamburger {
   display: none;
-  width: 50px;
-  height: 50px;
+  width: 3.1rem;
+  height: 3.1rem;
   background-color: var(--tr-color);
   border-radius: 50%;
   box-shadow: -1px 1px 1px grey, 1px 1px 1px grey, -1px -1px 1px grey,
@@ -237,7 +237,7 @@ aside i,
   content: "";
   position: absolute;
   left: 0;
-  width: 25px;
+  width: 1.6rem;
   height: 2px;
   background-color: rgb(255, 255, 255);
   margin: auto;
@@ -932,7 +932,6 @@ svg.circular-progress {
   flex-direction: column;
   width: 90%;
   max-width: 750px;
-  height: 250px;
   padding: 10px;
   margin: auto;
   border-radius: 5px;
@@ -941,28 +940,44 @@ svg.circular-progress {
   box-shadow: 1px 1px 5px rgb(83, 83, 83);
   overflow: hidden;
 }
-.review-slider {
-  position: absolute;
-  top: 0;
-  padding: 10px 20px 50px 20px;
-  transition: 0.5s;
-}
-.testimonial-content::before {
+.testimonial-content::before,
+.testimonial-content::after {
   content: "";
   background-color: var(--tr-color);
-  width: 130px;
-  height: 130px;
+  width: 8rem;
+  height: 8rem;
   border-radius: 50%;
   position: absolute;
+  z-index: 1;
+}
+.testimonial-content::before {
   top: -50px;
   left: -50px;
-  z-index: -1;
+}
+.testimonial-content::after {
+  bottom: -50px;
+  right: -50px;
+}
+.reviews {
+  position: relative;
+  min-height: 12rem;
+  width: 80%;
 }
 .review {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   padding-right: 7%;
   padding-bottom: 30px;
   margin: auto;
+  background-color: white;
+  opacity: 0;
+  visibility: hidden;
+}
+.review.active {
+  visibility: visible;
+  animation: fadeIn 1s ease-in forwards;
 }
 .review-text {
   position: relative;
@@ -984,9 +999,12 @@ svg.circular-progress {
 }
 .profile {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: center;
+  align-items: baseline;
   flex-wrap: wrap;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  margin-left: 3.8rem;
 }
 .profile h3 {
   font-weight: 600;
@@ -995,33 +1013,37 @@ svg.circular-progress {
   font-size: 1rem;
   color: grey;
 }
-.profile img {
-  width: 80px;
+#review-btns {
+  z-index: 1;
+}
+#review-btns button {
+  font-size: 1.2rem;
+  color: var(--sc-color);
+  background-color: transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid currentColor;
   border-radius: 50%;
-  margin-right: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
 }
-.testimonial-content aside {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  width: 50px;
-  height: 100%;
-  padding: 10px 5px;
-  border-top-right-radius: 8px;
-  border-top-right-radius: 8px;
-  background-color: var(--tr-color);
+#prev-btn {
+  margin-right: 0.5rem;
 }
-.testimonial-content aside i {
-  font-size: 2rem;
+#next-btn {
+  margin-left: 0.5rem;
 }
-aside i:active {
-  color: rgba(255, 255, 255, 0.74);
+#review-btns button:hover {
+  background-color: var(--sc-color);
+  color: white;
+  transition: 0.3s;
 }
-
+#review-btns button:active {
+  color: var(--tr-color);
+  transition: 0.3s;
+  background-color: transparent;
+}
 /*******
      Contact
     ********/
@@ -1239,7 +1261,7 @@ aside i:active {
     padding: 50px 20px;
   }
   .about-img {
-    height: 500px;
+    height: 30rem;
     object-fit: cover;
   }
   .about-img,
@@ -1251,8 +1273,8 @@ aside i:active {
   .skill-box {
     background-color: var(--pent-color) !important;
   }
-  .testimonial-content {
-    height: 200px;
+  #skills .skills {
+    gap: 0.5rem;
   }
   .form-container {
     border-top-right-radius: 0px;
@@ -1262,15 +1284,40 @@ aside i:active {
 }
 
 @media only screen and (max-width: 600px) {
+  .sc-heading {
+    font-size: 1.8rem;
+  }
   .overlay,
   #home {
-    height: 50vh !important;
+    height: 45vh !important;
+  }
+  .b-H {
+    letter-spacing: 0em;
+  }
+  .box {
+    width: 100%;
+    text-align: center;
+    padding: 0px 20px;
   }
   .b-H span {
-    font-size: 2.8rem;
+    font-size: 1.8rem;
   }
   .b-h {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+  }
+  .about-img {
+    height: 25rem;
+  }
+  .bio {
+    justify-content: center;
+  }
+  .skills-container:hover .skill-box {
+    opacity: 1;
+  }
+
+  .portfolio-item:hover {
+    opacity: 1 !important;
+    transform: scale(1.1);
   }
   .content-details {
     flex-direction: column-reverse;
@@ -1284,5 +1331,34 @@ aside i:active {
   }
   .review-text p.lead {
     font-size: 12px;
+  }
+}
+@media only screen and (max-width: 450px) {
+  html {
+    font-size: 13px;
+  }
+  .overlay,
+  #home {
+    height: 35vh !important;
+  }
+  .box {
+    padding: 0px 0px;
+  }
+  .b-H span {
+    font-size: 1.6rem;
+    margin-right: -0.4rem;
+  }
+  .b-h {
+    font-size: 1rem;
+  }
+  .reviews {
+    width: 100%;
+    min-height: 18rem;
+  }
+  .review-text p.lead {
+    padding: 0px 0px;
+  }
+  .profile {
+    align-items: center;
   }
 }

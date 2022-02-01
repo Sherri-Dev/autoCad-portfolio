@@ -156,37 +156,31 @@ const getServices = () => {
     });
 };
 // Testimonials Slider
-const reviewSlider = document.querySelector(".review-slider");
-const upArrow = document.getElementById("up-arrow");
-const downArrow = document.getElementById("down-arrow");
-const reviewLength = document.querySelectorAll(".review").length;
-const reviewHeight = document.querySelector(".review").clientHeight;
-let clickCounter = 0;
+const reviews = document.querySelectorAll(".review");
+let activeReview = "";
+const nextBtn = document.getElementById("next-btn");
+const prevBtn = document.getElementById("prev-btn");
 
-upArrow.addEventListener("click", () => slider("up"));
-downArrow.addEventListener("click", () => slider("down"));
+nextBtn.addEventListener("click", () => slider("next"));
+prevBtn.addEventListener("click", () => slider("prev"));
 
 function slider(direction) {
-  // Activating Slider
-
-  if (direction === "up" && clickCounter < reviewLength - 1) {
-    clickCounter++;
-    reviewSlider.style.top = -(reviewHeight * clickCounter) + "px";
-    downArrow.style.color = "white";
-  } else if (direction === "down" && clickCounter > 0) {
-    clickCounter--;
-    reviewSlider.style.top = -(reviewHeight * clickCounter) + "px";
-    upArrow.style.color = "white";
-  } else {
-    console.log("none");
+  console.log(reviews);
+  activeReview = document.querySelector(".review.active");
+  activeReview.classList.remove("active");
+  if (direction === "next") {
+    if (activeReview.nextElementSibling) {
+      activeReview.nextElementSibling.classList.add("active");
+    } else {
+      reviews[0].classList.add("active");
+    }
   }
-
-  // Deactivating Slider
-
-  if (direction === "up" && clickCounter == reviewLength - 1) {
-    upArrow.style.color = "grey";
-  } else if (direction === "down" && clickCounter == 0) {
-    downArrow.style.color = "grey";
+  if (direction === "prev") {
+    if (activeReview.previousElementSibling) {
+      activeReview.previousElementSibling.classList.add("active");
+    } else {
+      reviews[reviews.length - 1].classList.add("active");
+    }
   }
 }
 // Form
