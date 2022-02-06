@@ -1439,6 +1439,9 @@ svg.circular-progress {
   .portfolio-active .project-img {
     height: 40vh;
   }
+  .portfolio-active .portfolio-item-content {
+    width: 85vw;
+  }
   #reviews {
     width: 100%;
     min-height: 18rem;
