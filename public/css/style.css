@@ -41,7 +41,7 @@ header,
   font-family: "ubuntu";
 }
 
-p.lead,
+.lead,
 .bio div,
 .facts-info,
 .skill-h,
@@ -122,8 +122,7 @@ p.lead {
 .service-item:hover .service-icon,
 .profile h3,
 .address i,
-.address-info h3,
-.form-container .btn {
+.address-info h3 {
   color: var(--tr-color);
 }
 
@@ -958,7 +957,7 @@ svg.circular-progress {
   bottom: -50px;
   right: -50px;
 }
-.reviews {
+#reviews {
   position: relative;
   min-height: 12rem;
   width: 80%;
@@ -1044,9 +1043,80 @@ svg.circular-progress {
   transition: 0.3s;
   background-color: transparent;
 }
+.review-add-para {
+  text-align: center;
+  margin-top: 1rem;
+}
+.review-add-para .lead {
+  margin-right: 0.5rem;
+  font-family: "Lato";
+}
+#reviewForm {
+  animation: fadeIn 0.7s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: auto;
+  width: 100%;
+  background-color: rgba(12, 12, 12, 0.645);
+  z-index: 1000;
+}
+#reviewForm ::placeholder {
+  color: rgb(255, 255, 255);
+  opacity: 1;
+}
+#reviewForm input:focus::placeholder,
+#reviewForm textarea:focus::placeholder {
+  color: var(--hex-color);
+  opacity: 1;
+}
+.flex {
+  display: flex;
+}
+#reviewForm h2 {
+  color: white;
+}
+.review-container {
+  width: 80%;
+  height: max-content;
+  margin: auto;
+  background-color: var(--pent-color);
+  padding: 3%;
+  border-radius: 8px;
+  position: relative;
+}
+#close-reviewForm {
+  font-size: 2rem;
+  color: white;
+  position: absolute;
+  top: 0.1rem;
+  right: 0.4rem;
+  cursor: pointer;
+}
+#close-reviewForm:hover {
+  color: var(--hex-color);
+}
+#close-reviewForm input {
+  color: white !important;
+}
+#review-res {
+  background-color: rgba(0, 255, 157, 0.397);
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  margin-left: 1rem;
+}
+.error {
+  color: rgb(255, 0, 0);
+}
+.success {
+  color: rgb(0, 255, 0);
+}
 /*******
      Contact
-    ********/
+********/
 .contact-container {
   display: flex;
   justify-content: space-between;
@@ -1155,15 +1225,28 @@ svg.circular-progress {
   top: -10px;
   z-index: 1;
 }
-.form-container .btn {
+.btn {
   text-transform: uppercase;
   font-weight: bold;
-  background-color: var(--but-color);
   padding: 10px 15px;
   margin: 5px 0px;
   border: none;
   border-radius: 20px;
   box-shadow: 1px 1px 5px rgb(59, 59, 59);
+}
+.btn-light {
+  color: var(--tr-color);
+  background-color: var(--but-color);
+}
+.btn-dark {
+  color: white;
+  background-color: var(--tr-color);
+}
+.btn-dark:hover {
+  font-weight: bold;
+  color: var(--tr-color);
+  box-shadow: inset -1px -1px 2px var(--tr-color),
+    inset 1px 1px 2px var(--tr-color) !important;
 }
 .btn:hover {
   box-shadow: inset -1px -1px 2px var(--but-color),
@@ -1304,6 +1387,7 @@ svg.circular-progress {
   }
   .b-h {
     font-size: 1.2rem;
+    margin-bottom: 0.4rem;
   }
   .about-img {
     height: 25rem;
@@ -1328,6 +1412,7 @@ svg.circular-progress {
   .portfolio-active .project-img {
     box-shadow: none;
     border-radius: 0;
+    height: 50vh;
   }
   .review-text p.lead {
     font-size: 12px;
@@ -1351,7 +1436,10 @@ svg.circular-progress {
   .b-h {
     font-size: 1rem;
   }
-  .reviews {
+  .portfolio-active .project-img {
+    height: 40vh;
+  }
+  #reviews {
     width: 100%;
     min-height: 18rem;
   }
@@ -1360,5 +1448,12 @@ svg.circular-progress {
   }
   .profile {
     align-items: center;
+  }
+  .input-container {
+    margin-top: 15px;
+    margin-bottom: 7px;
+  }
+  .input-container textarea {
+    height: 150px;
   }
 }

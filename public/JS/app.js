@@ -1,3 +1,4 @@
+const API_INFO = "https://autocad-api.herokuapp.com/api";
 // Hamburger
 const hamburger = document.getElementById("hamburger");
 const header = document.getElementById("header");
@@ -90,9 +91,10 @@ window.addEventListener("load", () => initApp());
 const initApp = () => {
   getProjects();
   getServices();
+  getReviews();
 };
 const getProjects = () => {
-  fetch("https://autocad-api.herokuapp.com/api/projects?populate=images")
+  fetch(`${API_INFO}/projects?populate=images`)
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
@@ -123,7 +125,7 @@ const getProjects = () => {
            </ul>
            </div>
            <div class = 'project-img'>
-           <img src = '${project.attributes.images.data[0].attributes.formats.large.url}'>
+           <img src = '${project.attributes.images.data[0].attributes.formats.large.url}' alt = "project-img">
            </div>
            </div>
        </div>
@@ -138,7 +140,7 @@ const getProjects = () => {
 /********************** GET Services FROM CMS **************************/
 const getServices = () => {
   const servicesContainer = document.querySelector(".services-container");
-  fetch("https://autocad-api.herokuapp.com/api/services")
+  fetch(`${API_INFO}/services`)
     .then((res) => res.json())
     .then((data) => {
       const services = data.data;
@@ -161,28 +163,117 @@ let activeReview = "";
 const nextBtn = document.getElementById("next-btn");
 const prevBtn = document.getElementById("prev-btn");
 
-nextBtn.addEventListener("click", () => slider("next"));
-prevBtn.addEventListener("click", () => slider("prev"));
-
-function slider(direction) {
-  console.log(reviews);
+function slider(direction, reviewNum) {
   activeReview = document.querySelector(".review.active");
   activeReview.classList.remove("active");
   if (direction === "next") {
     if (activeReview.nextElementSibling) {
       activeReview.nextElementSibling.classList.add("active");
     } else {
-      reviews[0].classList.add("active");
+      reviewNum.classList.add("active");
     }
   }
   if (direction === "prev") {
     if (activeReview.previousElementSibling) {
       activeReview.previousElementSibling.classList.add("active");
     } else {
-      reviews[reviews.length - 1].classList.add("active");
+      reviewNum.classList.add("active");
     }
   }
 }
+/********************** GET Reviews FROM CMS **************************/
+const getReviews = () => {
+  const reviewsContainer = document.getElementById("reviews");
+  fetch(`${API_INFO}/reviews`)
+    .then((res) => res.json())
+    .then((data) => {
+      const reviews = data.data;
+      console.log(data);
+      let html = "";
+      reviews.forEach((review) => {
+        html += `<div class="review">
+      <div class="profile">
+              <h3>${review.attributes.reviewName}</h3>
+              <p>${review.attributes.reviewDescription}</p>
+      </div>
+      <div class="review-text">
+          <i class="fas fa-quote-left"></i>
+          <p class="lead">${review.attributes.reviewText}</p>
+      </div>
+      </div>`;
+      });
+      reviewsContainer.innerHTML = html;
+      const reviewsHtml = document.querySelectorAll(".review");
+      reviewsHtml[0].classList.add("active");
+      nextBtn.addEventListener("click", () => slider("next", reviewsHtml[0]));
+      prevBtn.addEventListener("click", () =>
+        slider("prev", reviewsHtml[reviewsHtml.length - 1])
+      );
+    });
+};
+/********************** ADD Reviews FORM **************************/
+const reviewForm = document.getElementById("reviewForm");
+const formBtn = document.getElementById("show-form");
+const closeFormBtn = document.getElementById("close-reviewForm");
+formBtn.addEventListener("click", () => showForm());
+closeFormBtn.addEventListener("click", () => closeForm());
+const showForm = () => {
+  console.log(2);
+  reviewForm.classList.remove("hide");
+  reviewForm.classList.add("flex");
+  document.body.classList.add("overflow-hidden");
+};
+const closeForm = () => {
+  reviewForm.classList.remove("flex");
+  reviewForm.classList.add("hide");
+  document.body.classList.remove("overflow-hidden");
+};
+/********************** ADD Reviews to CMS **************************/
+const addReviewBtn = document.getElementById("add-review-btn");
+reviewForm.addEventListener("submit", addReview);
+function addReview(e) {
+  e.preventDefault();
+  let name = document.getElementById("name-input");
+  let reviewDesc = document.getElementById("desig-input");
+  let reviewText = document.getElementById("review-input");
+  fetch(`${API_INFO}/reviews`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      data: {
+        publishedAt: null,
+        reviewName: name.value,
+        reviewDescription: reviewDesc.value,
+        reviewText: reviewText.vlaue,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      name.value = "";
+      reviewDesc.value = "";
+      reviewText.value = "";
+      showRes(data);
+    });
+}
+const showRes = (data) => {
+  const reviewRes = document.getElementById("review-res");
+  reviewRes.classList.remove("hide");
+  if (data.data) {
+    reviewRes.classList.add("success");
+    reviewRes.textContent = "Your review has been submitted successfully!";
+  } else {
+    reviewRes.classList.add("error");
+    reviewRes.textContent = `*${data.error.name}`;
+  }
+  setTimeout(() => {
+    reviewRes.classList.add("hide");
+  }, 1500);
+};
 // Form
 const inputs = document.querySelectorAll(".input");
 const label = document.querySelectorAll(".label");

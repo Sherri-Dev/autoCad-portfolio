@@ -5,15 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manak Draft and Designer" />
     <title>Manak Draft and Designer</title>
     <!-------------------- Style Sheet --------------------------->
     <link rel="stylesheet" href="css/style.css">
     <!-------------------- Favicon --------------------------->
-    <link rel="icon" type="image/png" href="./images/logo.png" />
+    <link rel="icon" type="image/png" href="./images/logo.png"/>
     <!-------------------- Google Font --------------------------->
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
     <!-------------------- Font Awesome Icons --------------------------->
     <script src="https://kit.fontawesome.com/6e8abed0ab.js" crossorigin="anonymous"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B4TJ8R6J81"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-B4TJ8R6J81');
+</script>
 </head>
 
 <body>
@@ -117,7 +127,7 @@
                     quod molestias odit aliquid ducimus nisi nam facilis
                     culpa dolores!</p>
                 <div class="about-content">
-                    <img class="about-img" src="images/Me.jpg" alt="">
+                    <img class="about-img" src="images/Me.jpg" alt="My-Image">
                     <div class="about-text">
                         <h1 class="sc-heading">
                             AutoCAD Designer
@@ -311,63 +321,29 @@
                 <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque nostrum laudantium sint
                     temporibus ullam blanditiis, nulla debitis quasi, fugiat mollitia incidunt, iusto culpa dolores!</p>
                 <div class="testimonial-content">
-                    <div class="reviews">
-                        <div class="review">
-                            <div class="profile">
-                                    <h3>Saul Goodman</h3>
-                                    <p>CEO and Co-founder</p>
-                            </div>
-                            <div class="review-text">
-                                <i class="fas fa-quote-left"></i>
-                                <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque nostrum
-                                    laudantium sint temporibus ullam blanditiis, nulla debitis quasi, fugiat mollitia
-                                    incidunt, iusto culpa dolores!</p>
-                            </div>
-                        </div>
-                        <div class="review active">
-                            <div class="profile">
-                                <h3>Saul Goodman</h3>
-                                <p>CEO and Co-founder</p>
-                            </div>
-
-                            <div class="review-text">
-                                <i class="fas fa-quote-left"></i>
-                                <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque nostrum
-                                    laudantium sint temporibus ullam blanditiis, nulla debitis quasi, fugiat mollitia
-                                    incidunt, iusto culpa dolores!</p>
-                            </div>
-                        </div>
-
-                        <div class="review">
-                            <div class="profile">
-                                    <h3>Saul Goodman</h3>
-                                    <p>CEO and Co-founder</p>
-                            </div>
-                            <div class="review-text">
-                                <i class="fas fa-quote-left"></i>
-                                <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque nostrum
-                                    laudantium sint temporibus ullam blanditiis, nulla debitis quasi, fugiat mollitia
-                                    incidunt, iusto culpa dolores!</p>
-                            </div>
-                        </div>
-                        <div class="review">
-                            <div class="profile">
-                                    <h3>Saul Goodman</h3>
-                                    <p>CEO and Co-founder</p>
-                            </div>
-                            <div class="review-text">
-                                <i class="fas fa-quote-left"></i>
-                                <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque nostrum
-                                    laudantium sint temporibus ullam blanditiis, nulla debitis quasi, fugiat mollitia
-                                    incidunt, iusto culpa dolores!</p>
-                            </div>
-                        </div>
+                    <div id="reviews">
                     </div>
                     <div id="review-btns">
                         <button id="prev-btn" class="fas fa-arrow-left"></button>
                         <button id="next-btn" class="fas fa-arrow-right"></button>
                     </div>
                 </div>
+                <div class="review-add-para"><span class="lead">Want to Add review?</span><button type="button" id="show-form" class="btn btn-dark">Click Here</button></div>
+                <form id="reviewForm" class="hide">
+                    <div class="review-container">
+                        <h2 class="sc-heading">Give Your Feedback</h2>
+                        <span id="close-reviewForm">&Cross;</span>
+                    <div class="input-container inline">
+                        <input type="text" id="name-input" class="input" placeholder="Enter Your Name" required>
+                    </div>
+                    <div class="input-container inline">
+                        <input type="text" id="desig-input" class="input" placeholder="Enter Your Designation" required>
+                    </div>
+                    <div class="input-container inline">
+                        <textarea type="text" id="review-input" class="input" placeholder="Enter Your Feedback" required></textarea>    
+                    </div>
+                <button class="btn btn-light" id="add-review-btn">Add Review</button><span id="review-res" class="lead hide"></span></div>
+                </form>
             </section>
             <!-- Contact Section -->
             <section id="contact">
@@ -387,7 +363,7 @@
                             <i class="fas fa-envelope-open"></i>
                             <div class="address-info">
                                 <h3 class="address-h">E-mail</h3>
-                                <p class="address-p">mshehzad@gmail.com</p>
+                                <p class="address-p">ShehzadMNK@gmail.com</p>
                             </div>
                         </div>
                         <div class="address">
@@ -421,7 +397,7 @@
                                 <label for="subject" class="label">Subject</label>
                                 <span></span>
                             </div>
-                            <button class="btn">Send message</button>
+                            <button class="btn btn-light">Send message</button>
                             <div id="my-form-status"></div>
                         </form>
                     </div>
