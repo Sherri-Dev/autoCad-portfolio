@@ -1,4 +1,8 @@
 const API_INFO = "https://autocad-api.herokuapp.com/api";
+// Loader
+import { activateLoader, deactivateLoader } from "./projects.js";
+document.addEventListener("DOMContentLoaded", activateLoader);
+window.addEventListener("load", deactivateLoader);
 // Hamburger
 const hamburger = document.getElementById("hamburger");
 const header = document.getElementById("header");
@@ -15,7 +19,6 @@ document.addEventListener("click", (e) => {
 });
 
 // Scroll Spy
-
 let current = "home";
 const menu = document.querySelector(".main-nav-ul");
 const menuItems = document.querySelectorAll(".main-nav-ul li");
@@ -77,85 +80,75 @@ const portfolioItems = document.querySelectorAll(".portfolio-item");
 const portfolioContent = document.querySelectorAll(".portfolio-item-content");
 const closePopup = document.querySelectorAll(".close-popup");
 function openProject(projects) {
-  projects.forEach((popup) => {
-    popup.addEventListener("click", (e) => {
-      popup.classList.toggle("portfolio-active");
-      popup.querySelector(".portfolio-overlay").classList.toggle("hide");
-      popup.querySelector(".close-popup").classList.toggle("show-close");
-      document.body.classList.toggle("overflow-hidden");
+  projects.forEach((project) => {
+    project.addEventListener("click", async (e) => {
+      let projectID = e.target.querySelector("p").textContent;
+      const data = await getDataFromApi(
+        `projects/${projectID}`,
+        "populate=images"
+      );
+      sessionStorage.setItem("selectedProject", JSON.stringify(data.data));
+      location.href = "./project.html";
     });
   });
 }
-/********************** GET Projects FROM CMS **************************/
+
+/********************** GET DATA FROM CMS **************************/
+const getDataFromApi = async (dataToBeFetched, params) => {
+  const res = params
+    ? await fetch(`${API_INFO}/${dataToBeFetched}?${params}`)
+    : await fetch(`${API_INFO}/${dataToBeFetched}`);
+  return await res.json();
+};
 window.addEventListener("load", () => initApp());
 const initApp = () => {
   getProjects();
   getServices();
   getReviews();
 };
-const getProjects = () => {
-  fetch(`${API_INFO}/projects?populate=images`)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      const projects = data.data;
-      let projectsHtml = "";
-      projects.forEach((project) => {
-        let descriptionArr = project.attributes.description.split("\n");
-        let descriptionli = "";
-        descriptionArr.forEach((text) => {
-          descriptionli += `<li>${text}</li>`;
-        });
-        projectsHtml += `<div class="portfolio-item">
+//Get Projects
+const getProjects = async () => {
+  const data = await getDataFromApi(
+    "projects",
+    "populate=images&sort=createdAt:desc"
+  );
+  const projects = data.data;
+  let projectsHtml = "";
+  projects.forEach((project) => {
+    projectsHtml += `<div class="portfolio-item">
        <div class="portfolio-overlay">
            <h3 class="portfolio-h">
                ${project.attributes.title}
            </h3>
+           <p>${project.id}</p>
        </div>
        <div class="portfolio-item-content">
-           <div class="close-popup">
-               <p class="lead">Tap again to close!</p>
-               <p class="cross">&#9587</p>
-           </div>
-           <div class = "content-details">
-           <div class="ext-text">
-           <h2>${project.attributes.title}</h2>
-           <ul class="lead">
-           ${descriptionli}
-           </ul>
-           </div>
            <div class = 'project-img'>
-           <img src = '${project.attributes.images.data[0].attributes.formats.large.url}' alt = "project-img">
-           </div>
+           <img src = '${project.attributes.images.data[0].attributes.url}' alt = "project-img">
            </div>
        </div>
    </div>`;
-      });
-      portfolioGallery.innerHTML = projectsHtml;
-      openProject(document.querySelectorAll(".portfolio-item"));
-    });
+  });
+  portfolioGallery.innerHTML = projectsHtml;
+  openProject(document.querySelectorAll(".portfolio-item"));
 };
 
-// Services Section
-/********************** GET Services FROM CMS **************************/
-const getServices = () => {
+// Get Services
+
+const getServices = async () => {
   const servicesContainer = document.querySelector(".services-container");
-  fetch(`${API_INFO}/services`)
-    .then((res) => res.json())
-    .then((data) => {
-      const services = data.data;
-      console.log(data);
-      let serviceHtml = "";
-      services.forEach((service, index) => {
-        let myindex = index < 10 ? `0${index + 1}` : index + 1;
-        serviceHtml += `<div class="service-item">
+  const data = await getDataFromApi("services");
+  const services = data.data;
+  let serviceHtml = "";
+  services.forEach((service, index) => {
+    let myindex = index < 10 ? `0${index + 1}` : index + 1;
+    serviceHtml += `<div class="service-item">
 <div class="service-icon">${myindex}</div>
 <h3>${service.attributes.title}</h3>
 <p>${service.attributes.description}</p>
 </div>`;
-      });
-      servicesContainer.innerHTML = serviceHtml;
-    });
+  });
+  servicesContainer.innerHTML = serviceHtml;
 };
 // Testimonials Slider
 const reviews = document.querySelectorAll(".review");
@@ -181,17 +174,14 @@ function slider(direction, reviewNum) {
     }
   }
 }
-/********************** GET Reviews FROM CMS **************************/
-const getReviews = () => {
+// Get Reviews
+const getReviews = async () => {
   const reviewsContainer = document.getElementById("reviews");
-  fetch(`${API_INFO}/reviews`)
-    .then((res) => res.json())
-    .then((data) => {
-      const reviews = data.data;
-      console.log(data);
-      let html = "";
-      reviews.forEach((review) => {
-        html += `<div class="review">
+  const data = await getDataFromApi("reviews", "sort=createdAt:desc");
+  const reviews = data.data;
+  let html = "";
+  reviews.forEach((review) => {
+    html += `<div class="review">
       <div class="profile">
               <h3>${review.attributes.reviewName}</h3>
               <p>${review.attributes.reviewDescription}</p>
@@ -201,15 +191,14 @@ const getReviews = () => {
           <p class="lead">${review.attributes.reviewText}</p>
       </div>
       </div>`;
-      });
-      reviewsContainer.innerHTML = html;
-      const reviewsHtml = document.querySelectorAll(".review");
-      reviewsHtml[0].classList.add("active");
-      nextBtn.addEventListener("click", () => slider("next", reviewsHtml[0]));
-      prevBtn.addEventListener("click", () =>
-        slider("prev", reviewsHtml[reviewsHtml.length - 1])
-      );
-    });
+  });
+  reviewsContainer.innerHTML = html;
+  const reviewsHtml = document.querySelectorAll(".review");
+  reviewsHtml[0].classList.add("active");
+  nextBtn.addEventListener("click", () => slider("next", reviewsHtml[0]));
+  prevBtn.addEventListener("click", () =>
+    slider("prev", reviewsHtml[reviewsHtml.length - 1])
+  );
 };
 /********************** ADD Reviews FORM **************************/
 const reviewForm = document.getElementById("reviewForm");
@@ -218,7 +207,6 @@ const closeFormBtn = document.getElementById("close-reviewForm");
 formBtn.addEventListener("click", () => showForm());
 closeFormBtn.addEventListener("click", () => closeForm());
 const showForm = () => {
-  console.log(2);
   reviewForm.classList.remove("hide");
   reviewForm.classList.add("flex");
   document.body.classList.add("overflow-hidden");
@@ -247,33 +235,37 @@ function addReview(e) {
         publishedAt: null,
         reviewName: name.value,
         reviewDescription: reviewDesc.value,
-        reviewText: reviewText.vlaue,
+        reviewText: reviewText.value,
       },
     }),
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       name.value = "";
       reviewDesc.value = "";
       reviewText.value = "";
       showRes(data);
+    })
+    .catch((error) => {
+      showRes(error);
     });
 }
 const showRes = (data) => {
   const reviewRes = document.getElementById("review-res");
   reviewRes.classList.remove("hide");
-  if (data.data) {
-    reviewRes.classList.add("success");
-    reviewRes.textContent = "Your review has been submitted successfully!";
-  } else {
-    reviewRes.classList.add("error");
-    reviewRes.textContent = `*${data.error.name}`;
-  }
+  let msg = data.data
+    ? "Your review has been submitted successfully!"
+    : data && !data.data
+    ? "Connection Error"
+    : `*${data.error.name}`;
+  let classToBeAdded = data.data ? "success" : "error";
+  reviewRes.classList.add(`${classToBeAdded}`);
+  reviewRes.textContent = `${msg}`;
   setTimeout(() => {
     reviewRes.classList.add("hide");
-  }, 1500);
+  }, 2500);
 };
+
 // Form
 const inputs = document.querySelectorAll(".input");
 const label = document.querySelectorAll(".label");
